@@ -1,0 +1,17 @@
+backend/
+├── app.py                # ルーティング層（Flaskエンドポイント定義だけ）
+├── __init__.py           # パッケージ化用。中身なしでOK
+├── domain/               # ドメイン（純粋なビジネスロジック）層
+│   ├── __init__.py
+│   ├── bonus.py          # PV→BV→差額ボーナス計算の中核関数
+│   └── distribution.py   # PVコピーなど“単発の計算”ロジック（必要なら）
+├── simulation/           # シミュレーション（状態変化・月次ループ）層
+│   ├── __init__.py
+│   ├── params.py         # シミュレーション入力パラメータ定義(dataclass 等)
+│   ├── population.py     # 加入/離脱・継続率など人数推移ロジック
+│   └── month_loop.py     # 360ヶ月ループし、毎月の計算を組み立てる本体
+└── tests/                # テスト一式
+    ├── test_bonus.py     # ドメイン関数(calc_bonus等)の単体テスト
+    ├── test_api.py       # Flask API の疎通/契約テスト
+    └── （他テスト追加予定）
+     ├── population.py 
