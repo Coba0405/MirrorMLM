@@ -1,4 +1,5 @@
-import json
+import json, sys, os
+sys.path.append(os.getcwd())
 from backend.domain.bonus import calc_bonus
 
 members = {
