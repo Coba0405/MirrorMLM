@@ -16,12 +16,6 @@ from backend.domain.bonus import calc_bonus
 from backend.simulation.month_loop import simulate
 from backend.simulation.params import SimParams
 
-# from domain.constants     import PV_PER_YEN, BV_PER_PV
-# from domain.distribution  import distribute_pv
-# from domain.bonus         import calc_bonus
-# from simulation.month_loop import simulate
-# from simulation.params     import SimParams
-
 app = Flask(__name__)
 
 # Vite の dev サーバ (http://localhost:5173) だけ許可
