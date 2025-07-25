@@ -1,0 +1,26 @@
+import sys, os
+sys.path.append(os.getcwd())
+from backend.simulation.month_loop import simulate
+from backend.config.members import initial_members
+from backend.domain.bonus import calc_bonus
+from backend.simulation.params import SimParams
+
+# メンバー初期化が正しく行われているか
+def test_initial_member_value():
+    assert len(initial_members()) == 1
+
+# simulateの初期値が正常か
+params = SimParams(months=1, )
+# 子が20人勧誘ごとにcount_childに+1されるか
+def test_count_child_increases_every_20_invites():
+
+
+# 加入したユーザーがgrace_monthsの期間は継続率減少の対象外になっているか
+# 加入してからcont_rateの継続率が適用されているか
+# count_childが0の場合、invites_pool_grandが増えないこと
+# 加入した子、孫にidが付与されていること
+# 加入した子、孫にparentとjoin_monthが付与されていること
+# 現在のアクティブな子の数を数える
+# 現在のアクティブな孫の数を数える
+# calc_bonusの返り値が正しいか
+
