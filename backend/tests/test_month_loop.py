@@ -22,7 +22,7 @@ def test_count_child_19_invites():
         child_activity_rate = 0.9,
         invite_success_rate= 0.05
     )
-    result, _ = simulate(params,initial_members)
+    result, _, _ = simulate(params,initial_members())
     # print(result)
     assert result[0]["count_child"] == 0
 
@@ -39,9 +39,9 @@ def test_count_child_20_invites():
         child_activity_rate = 0.9,
         invite_success_rate= 0.05
     )
-    recodes, _ = simulate(params,initial_members())
+    records, _, _ = simulate(params,initial_members())
     # print(results)
-    assert recodes[0]["count_child"] == 1
+    assert records[0]["count_child"] == 1
 
 # 加入してからcont_rateの継続率が適用されているか
 def test_cont_rate_decreases_children():
@@ -61,12 +61,12 @@ def test_cont_rate_decreases_children():
         child_activity_rate = 0.9,
         invite_success_rate = 0.05
     )
-    recodes, _ = simulate(params, initial_members())
+    records, _, _ = simulate(params, initial_members())
 
     # 月毎のアクティブ子の人数をチェック
-    assert recodes[0]["count_child"] <= 10
-    assert recodes[1]["count_child"] <= recodes[0]["count_child"]
-    assert recodes[2]["count_child"] <= recodes[1]["count_child"]
+    assert records[0]["count_child"] <= 10
+    assert records[1]["count_child"] <= records[0]["count_child"]
+    assert records[2]["count_child"] <= records[1]["count_child"]
 
 #  arrange:準備段階, act:実行, assert:挙動確認
 
@@ -83,12 +83,12 @@ def test_grace_months_not_cont_rate():
         child_activity_rate = 1,
         invite_success_rate = 0.05
     )
-    recodes, _ = simulate(params, initial_members())
+    records, _, _ = simulate(params, initial_members())
 
-    assert recodes[0]["count_child"] == 1
-    assert recodes[1]["count_child"] == 2
-    assert recodes[2]["count_child"] == 2
-    assert recodes[3]["count_child"] == 2
+    assert records[0]["count_child"] == 1
+    assert records[1]["count_child"] == 2
+    assert records[2]["count_child"] == 2
+    assert records[3]["count_child"] == 2
 
 # count_childが0の場合、invites_pool_grandが増えないこと
 def test_no_grand_without_children():
@@ -103,12 +103,12 @@ def test_no_grand_without_children():
         child_activity_rate = 1,
         invite_success_rate = 0.05
     )
-    recodes, _ = simulate(params, initial_members())
+    records, _, _ = simulate(params, initial_members())
 
-    assert recodes[0]["count_child"] == 0
-    assert recodes[0]["invites_pool_grand"] == 0
-    assert recodes[1]["count_child"] == 0
-    assert recodes[1]["invites_pool_grand"] == 0
+    assert records[0]["count_child"] == 0
+    assert records[0]["invites_pool_grand"] == 0
+    assert records[1]["count_child"] == 0
+    assert records[1]["invites_pool_grand"] == 0
 
 # count_childが1の場合、invites_pool_grandが増えること
 def test_grand_without_children():
@@ -123,16 +123,16 @@ def test_grand_without_children():
         child_activity_rate = 1,
         invite_success_rate = 1
     )
-    recodes, _ = simulate(params, initial_members())
+    records, _, _ = simulate(params, initial_members())
 
-    assert recodes[0]["count_child"] == 0
-    # assert recodes[0]["count_grand"] == 0
-    # assert recodes[0]["invites_pool_child"] == 10
-    assert recodes[0]["invites_pool_grand"] == 0
-    assert recodes[1]["count_child"] == 1
-    # assert recodes[1]["count_grand"] == 0
-    assert recodes[1]["invites_pool_grand"] == 10
-    # print(recodes[1]["invites_pool_grand"])
+    assert records[0]["count_child"] == 0
+    # assert records[0]["count_grand"] == 0
+    # assert records[0]["invites_pool_child"] == 10
+    assert records[0]["invites_pool_grand"] == 0
+    assert records[1]["count_child"] == 1
+    # assert records[1]["count_grand"] == 0
+    assert records[1]["invites_pool_grand"] == 10
+    # print(records[1]["invites_pool_grand"])
 
 # 加入した子にidが付与されていること
 def test_child_created_id():
@@ -148,7 +148,7 @@ def test_child_created_id():
         invite_success_rate = 1
     )
 
-    _, members = simulate(params, initial_members())
+    _, members, _ = simulate(params, initial_members())
     child_ids = []
     for mid in members:
         if mid.startswith("B"):
@@ -174,7 +174,7 @@ def test_grand_creat_id():
         invite_success_rate = 1
     )
 
-    _, members = simulate(params, initial_members())
+    _, members, _ = simulate(params, initial_members())
     grand_ids = []
     for mid in members:
         if mid.startswith("C"):
@@ -202,7 +202,7 @@ def test_retention_parent_and_join_month():
         child_activity_rate = 1,
         invite_success_rate = 0
     )
-    _, members = simulate(params, initial_members())
+    _, members, _ = simulate(params, initial_members())
 
     for mid, meta in members.items():
         if mid.startswith("B") or mid.startswith("C"):
@@ -222,7 +222,7 @@ def test_is_active_user():
         child_activity_rate = 0.5,
         invite_success_rate = 0.05
     )
-    recodes, _ = simulate(params, initial_members())
+    records, _ , _= simulate(params, initial_members())
 
-    assert recodes[0]["num_active_children"] == 1
-    assert recodes[1]["num_active_children"] == 2
+    assert records[0]["num_active_children"] == 1
+    assert records[1]["num_active_children"] == 2

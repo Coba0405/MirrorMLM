@@ -1,14 +1,16 @@
 import random
+from decimal import Decimal
 from backend.domain.bonus import calc_bonus
 from backend.config.members import initial_members
 from .population import calc_join_and_remainder
-from backend.simulation.params import SimParams
+from backend.simulation.params import SimParams, TotalCost
 
-def simulate(params: SimParams, members: dict) -> list:
-    members = initial_members()
+def simulate(params: SimParams, members: dict | None = None):
+    members = initial_members() if members is None else members
+    totals = TotalCost() 
     next_child_id = 1
     next_grand_id = 1
-    recodes = []
+    records = []
     count_child = 0 #現在の子の人数
     count_grand = 0 #現在の孫の人数
     invites_pool_child = 0 #親がこれまで勧誘した子の数
@@ -33,21 +35,18 @@ def simulate(params: SimParams, members: dict) -> list:
             members[member_id] = {"parent": "A", "join_month": month}
             next_child_id += 1
 
-        active_children = [
-            # membersの中からmember_idとmetaでそのidに紐づく情報を順繰りに取得
-            mid for mid, meta in members.items()
+        active_children = []
+        # membersの中からmember_idとmetaでそのidに紐づく情報を順繰りに取得
+        for mid, meta in members.items():
             # IDが"B"で始まる人に絞る 且つ join_monthから継続率、猶予期間から現在も活動しているかを判定
-            if mid.startswith("B") and is_active(meta["join_month"],month, params.cont_rate, params.grace_months)
-        ]
-        # active_children = []
-        #     for mid, meta in members.items():
-        #         if mid.startswith("B") and is_active(
-        #             meta["join_month"],
-        #             month,
-        #             params.cont_rate,
-        #             params.grace_months
-        #         ):
-        #         active_children.append(mid)
+            if mid.startswith("B") and is_active(
+                meta["join_month"],
+                month,
+                params.cont_rate,
+                params.grace_months
+            ):
+                active_children.append(mid)
+
         # 実際のアクティブユーザーの活動人数を算出してnum_activate_childrenに代入
         num_active_children = int(len(active_children) * params.child_activity_rate)
         # 実際のアクティブユーザーが勧誘した人数をchild_invites_totalに代入
@@ -91,6 +90,7 @@ def simulate(params: SimParams, members: dict) -> list:
 
         # 月毎の購入額を設定
         purchases = {"A": params.self_monthly_yen}
+        totals.self_purchases += Decimal(params.self_monthly_yen)
         for mid, meta in members.items():
             join_month = meta["join_month"]
             if is_active(join_month, month, params.cont_rate, params.grace_months):
@@ -123,7 +123,8 @@ def simulate(params: SimParams, members: dict) -> list:
             "group_bv": bonus_info["A"]["group_bv"],
             "rate": bonus_info["A"]["rate"],
             "bonus": bonus_info["A"]["bonus"],
+            "total_self_purchases": float(totals.self_purchases),
         }
         # レコード（辞書）を作成し、append
-        recodes.append(rec)
-    return recodes, members
+        records.append(rec)
+    return records, members, totals

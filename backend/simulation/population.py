@@ -1,5 +1,5 @@
 from decimal import Decimal, ROUND_HALF_UP
-from simulation.params import SimParams
+from .params import SimParams
 
 def rint(x: float) -> int:
     return int(Decimal(str(x)).quantize(Decimal("0"),rounding=ROUND_HALF_UP))
