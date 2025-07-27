@@ -7,7 +7,7 @@ from backend.simulation.params import SimParams, TotalCost
 
 def simulate(params: SimParams, members: dict | None = None):
     members = initial_members() if members is None else members
-    totals = TotalCost() 
+    totals = TotalCost()
     next_child_id = 1
     next_grand_id = 1
     records = []
@@ -67,6 +67,8 @@ def simulate(params: SimParams, members: dict | None = None):
             }
             next_grand_id += 1
 
+        totals.invites += new_child + new_grand
+
         # 現在のアクティブな子、孫を数える（継続率）
         count_child = 0
         for mid, meta in members.items():
@@ -91,6 +93,7 @@ def simulate(params: SimParams, members: dict | None = None):
         # 月毎の購入額を設定
         purchases = {"A": params.self_monthly_yen}
         totals.self_purchases += Decimal(params.self_monthly_yen)
+        totals.activity_cost += Decimal(params.activity_cost_monthly)
         for mid, meta in members.items():
             join_month = meta["join_month"]
             if is_active(join_month, month, params.cont_rate, params.grace_months):
@@ -109,6 +112,7 @@ def simulate(params: SimParams, members: dict | None = None):
 
         # ボーナス計算呼び出し 関数を直接呼び出す
         bonus_info = calc_bonus(purchases, members, root_id="A")
+        totals.bonus += Decimal(bonus_info["A"]["bonus"])
 
         rec = {
             "month": month,
@@ -122,7 +126,8 @@ def simulate(params: SimParams, members: dict | None = None):
             "group_pv": bonus_info["A"]["group_pv"],
             "group_bv": bonus_info["A"]["group_bv"],
             "rate": bonus_info["A"]["rate"],
-            "bonus": bonus_info["A"]["bonus"],
+            "bonus": float(bonus_info["A"]["bonus"]),
+            "self_purchase": params.self_monthly_yen,
             "total_self_purchases": float(totals.self_purchases),
         }
         # レコード（辞書）を作成し、append

@@ -5,6 +5,7 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
+from dataclasses import asdict, is_dataclass
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from decimal import Decimal, ROUND_HALF_UP
@@ -15,6 +16,7 @@ from backend.domain.distribution import distribute_pv
 from backend.domain.bonus import calc_bonus
 from backend.simulation.month_loop import simulate
 from backend.simulation.params import SimParams
+from backend.simulation.summary import calc_summary
 
 app = Flask(__name__)
 
@@ -24,6 +26,15 @@ CORS(
     resources={r"/api/*": {"origins": "http://localhost:5173"}},
     supports_credentials=True,
 )
+
+def dec2float(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    if is_dataclass(obj):
+        return {k: dec2float(v) for k, v in asdict(obj).items()}
+    if isinstance(obj, dict):
+        return {k: dec2float(v) for k, v in obj.items()}
+    return obj
 
 members = initial_members()
 
@@ -54,10 +65,19 @@ def distribute():
 
 @app.route("/api/simulate", methods=["POST"])
 def run_sim():
-    p = request.json
-    params = SimParams(**p)
-    recs = simulate(params, members)
-    return jsonify(recs)
+    data = request.json
+    records, summary = calc_summary(
+        months=data["months"],
+        self_yen=data["self_monthly_yen"],
+        invite=data["invite_per_month"],
+        activity_cost=data.get("activity_cost_monthly", 0),
+        child_activity_rate = data["child_activity_rate"],
+    )
+
+    return jsonify({
+        "records": records,
+        "summary": summary
+    })
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

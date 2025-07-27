@@ -5,7 +5,7 @@ from backend.config.members import initial_members
 from backend.domain.bonus import calc_bonus
 from backend.simulation.params import SimParams
 
-# メンバー初期化が正しく行われているか
+# 1.メンバー初期化が正しく行われているか
 def test_initial_member_value():
     assert len(initial_members()) == 1
 
@@ -26,7 +26,7 @@ def test_count_child_19_invites():
     # print(result)
     assert result[0]["count_child"] == 0
 
-# 20人勧誘した時にcount_childに+1されるか
+# 2.20人勧誘した時にcount_childに+1されるか
 def test_count_child_20_invites():
     params = SimParams(
         months = 1,
@@ -43,7 +43,7 @@ def test_count_child_20_invites():
     # print(results)
     assert records[0]["count_child"] == 1
 
-# 加入してからcont_rateの継続率が適用されているか
+# 3. 加入してからcont_rateの継続率が適用されているか
 def test_cont_rate_decreases_children():
     # 初期状態子10人の初期メンバーを作る
     members = {"A": {"parent": None, "join_month": 0}}
@@ -70,7 +70,7 @@ def test_cont_rate_decreases_children():
 
 #  arrange:準備段階, act:実行, assert:挙動確認
 
-# 加入したユーザーがgrace_monthsの期間は継続率減少の対象外になっているか
+# 4. 加入したユーザーがgrace_monthsの期間は継続率減少の対象外になっているか
 def test_grace_months_not_cont_rate():
     params = SimParams(
         months = 4,
@@ -90,7 +90,7 @@ def test_grace_months_not_cont_rate():
     assert records[2]["count_child"] == 2
     assert records[3]["count_child"] == 2
 
-# count_childが0の場合、invites_pool_grandが増えないこと
+# 5. count_childが0の場合、invites_pool_grandが増えないこと
 def test_no_grand_without_children():
     params = SimParams(
         months = 2,
@@ -110,7 +110,7 @@ def test_no_grand_without_children():
     assert records[1]["count_child"] == 0
     assert records[1]["invites_pool_grand"] == 0
 
-# count_childが1の場合、invites_pool_grandが増えること
+# 6. count_childが1の場合、invites_pool_grandが増えること
 def test_grand_without_children():
     params = SimParams(
         months = 3,
@@ -134,7 +134,7 @@ def test_grand_without_children():
     assert records[1]["invites_pool_grand"] == 10
     # print(records[1]["invites_pool_grand"])
 
-# 加入した子にidが付与されていること
+# 7. 加入した子にidが付与されていること
 def test_child_created_id():
     params = SimParams(
         months = 2,
@@ -160,7 +160,7 @@ def test_child_created_id():
     assert members["B2"]["parent"] == "A"
     # print(f"{child_ids}")
 
-# 加入した孫にidが付与されていること
+# 8. 加入した孫にidが付与されていること
 def test_grand_creat_id():
     params = SimParams(
         months = 3,
@@ -189,7 +189,7 @@ def test_grand_creat_id():
     # print(members["C2"]["parent"])
     # print(grand_ids["parent"])
 
-# 加入した子、孫にparentとjoin_monthが付与されていること
+# 9. 加入した子、孫にparentとjoin_monthが付与されていること
 def test_retention_parent_and_join_month():
     params = SimParams(
         months = 3,
@@ -209,7 +209,7 @@ def test_retention_parent_and_join_month():
             assert "parent" in meta, f"{mid} にparentがありません"
             assert "join_month" in meta, f"{mid} に join_month がありません"
 
-# 現在の継続している子のうちアクティブな子の数を数える
+# 10. 現在の継続している子のうちアクティブな子の数を数える
 def test_is_active_user():
     params = SimParams(
         months = 3,

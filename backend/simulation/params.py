@@ -10,7 +10,7 @@ class SimParams:
     months: int #シミュレーション期間
     self_monthly_yen: int #自分の月間製品購入費
     invite_per_month: int #月間勧誘人数
-    activity_cont_monthly: int = 0
+    activity_cost_monthly: int = 0 #月間勧誘費
     child_monthly_yen: int = field(default_factory=_rand_cont) #子の月間製品購入費
     grand_monthly_yen: int = field(default_factory=_rand_cont) #孫の月間製品購入費
     cont_rate: float = 0.9439 #ダウン会員継続率
@@ -18,12 +18,14 @@ class SimParams:
     child_activity_rate: float = 0.7 #勧誘した子のアクティブ率70%
     invite_success_rate: float = 0.05 #勧誘成功率
 
+@dataclass
 class TotalCost:
-    self_purchases: Decimal = Decimal(0) #自分の製品購入費総額
-    activity_cost: Decimal = Decimal(0) #販促費用総額
-    bonus: Decimal = Decimal(0) #ボーナス総額
-    invites: int = 0 #純利益
+    self_purchases: Decimal = field(default_factory=lambda: Decimal(0)) #自分の製品購入費総額
+    activity_cost: Decimal = field(default_factory=lambda: Decimal(0)) #販促費用総額
+    bonus: Decimal = field(default_factory=lambda: Decimal(0)) #ボーナス総額
+    invites: int = 0 #累計加入人数
 
+    # 純利益
     @property
     def net_profit(self) -> Decimal:
         return self.bonus - (self.self_purchases + self.activity_cost)
