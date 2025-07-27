@@ -1,10 +1,10 @@
 from decimal import Decimal
 
 # 差額ボーナス計算モジュール
-PV_PER_YEN = Decimal("1") / Decimal("1.2987")           #1PVあたりの金額
+PV_PER_YEN = Decimal("1") / Decimal("1.5345")           #1PVあたりの金額
 BV_PER_PV = Decimal("1.395")             #PVからBVに換算
-PV_RATE = Decimal("1") / Decimal("1.3")    # 円→PV
-BV_RATE = Decimal("1.395")     # PB→BV
+# PV_RATE = Decimal("1") / Decimal("1.3")    # 円→PV
+# BV_RATE = Decimal("1.395")     # PB→BV
 # 成績別ボーナス表（PV下限、還元率を大きい順にする
 BONUS_TABLE = [
     (1_500_000, Decimal("0.21")),

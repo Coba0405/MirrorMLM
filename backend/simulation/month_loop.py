@@ -39,6 +39,15 @@ def simulate(params: SimParams, members: dict) -> list:
             # IDが"B"で始まる人に絞る 且つ join_monthから継続率、猶予期間から現在も活動しているかを判定
             if mid.startswith("B") and is_active(meta["join_month"],month, params.cont_rate, params.grace_months)
         ]
+        # active_children = []
+        #     for mid, meta in members.items():
+        #         if mid.startswith("B") and is_active(
+        #             meta["join_month"],
+        #             month,
+        #             params.cont_rate,
+        #             params.grace_months
+        #         ):
+        #         active_children.append(mid)
         # 実際のアクティブユーザーの活動人数を算出してnum_activate_childrenに代入
         num_active_children = int(len(active_children) * params.child_activity_rate)
         # 実際のアクティブユーザーが勧誘した人数をchild_invites_totalに代入
@@ -60,8 +69,25 @@ def simulate(params: SimParams, members: dict) -> list:
             next_grand_id += 1
 
         # 現在のアクティブな子、孫を数える（継続率）
-        count_child = sum(1 for mid, meta in members.items() if mid.startswith("B") and is_active(meta["join_month"], month, params.cont_rate, params.grace_months))
-        count_grand = sum(1 for mid, meta in members.items() if mid.startswith("C") and is_active(meta["join_month"], month, params.cont_rate, params.grace_months))
+        count_child = 0
+        for mid, meta in members.items():
+            if mid.startswith("B") and is_active(
+                meta["join_month"],
+                month,
+                params.cont_rate,
+                params.grace_months
+            ):
+                count_child += 1
+
+        count_grand
+        for mid, meta in members.items():
+            if mid.startswith("C") and is_active(
+                meta["join_month"],
+                month,
+                params.cont_rate,
+                params.grace_months
+            ):
+                count_grand += 1
 
         # 月毎の購入額を設定
         purchases = {"A": params.self_monthly_yen}
@@ -70,14 +96,14 @@ def simulate(params: SimParams, members: dict) -> list:
             if is_active(join_month, month, params.cont_rate, params.grace_months):
                 if mid.startswith("B"):
                     if month == join_month:
-                        # 加入した初月だけ470,000円分購入
-                        purchases[mid] = 470000
+                        # 加入した初月だけ360,000PVになるよう560,000円分購入
+                        purchases[mid] = 560000
                     else:
                         # 加入月以外はランダムに取得する金額
                         purchases[mid] = params.child_monthly_yen
                 elif mid.startswith("C"):
                     if month == join_month:
-                        purchases[mid] = 470000
+                        purchases[mid] = 560000
                     else:
                         purchases[mid] = params.grand_monthly_yen
 
@@ -92,6 +118,7 @@ def simulate(params: SimParams, members: dict) -> list:
             "invites_pool_grand": invites_pool_grand,
             "child_monthly_yen": params.child_monthly_yen,
             "grand_monthly_yen": params.grand_monthly_yen,
+            "num_active_children": num_active_children, #ユニットテスト用
             "group_pv": bonus_info["A"]["group_pv"],
             "group_bv": bonus_info["A"]["group_bv"],
             "rate": bonus_info["A"]["rate"],
@@ -99,4 +126,4 @@ def simulate(params: SimParams, members: dict) -> list:
         }
         # レコード（辞書）を作成し、append
         recodes.append(rec)
-    return recodes
+    return recodes, members

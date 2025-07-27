@@ -69,7 +69,7 @@ def calc_bonus(purchases: dict, members: dict, root_id: str):
     }
     return parent_only
 
-    # 5. 全員分返す（test_bonus.py親、子、孫を返す時はこっちをアクティブ化）
+    # 6. 全員分返す（test_bonus.py親、子、孫を返す時はこっちをアクティブ化）
     # Decimal は JSON 化しづらいので float にしたい項目があれば変換
     # for d in info.values():
     #     if isinstance(d.get("rate"), Decimal):
