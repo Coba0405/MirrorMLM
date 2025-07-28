@@ -13,11 +13,12 @@ class SimParams:
     grace_months: int = 2 #初期会員残留猶予期間
     child_activity_rate: float = 0.7 #勧誘した子のアクティブ率70%
     invite_success_rate: float = 0.05 #勧誘成功率
+    area: str = "city_center"
 
 @dataclass
 class TotalCost:
     self_purchases: Decimal = field(default_factory=lambda: Decimal(0)) #自分の製品購入費総額
-    activity_cost: Decimal = field(default_factory=lambda: Decimal(0)) #販促費用総額
+    activity_cost: Decimal = field(default_factory=lambda: Decimal(0)) #販促費用全期間総額
     bonus: Decimal = field(default_factory=lambda: Decimal(0)) #ボーナス総額
     invites: int = 0 #累計加入人数
 

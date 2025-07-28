@@ -3,6 +3,7 @@ from decimal import Decimal
 from backend.domain.bonus import calc_bonus
 from backend.config.members import initial_members
 from .population import calc_join_and_remainder
+from .cost import calc_monthly_activity_cost
 from backend.simulation.params import SimParams, TotalCost
 
 def simulate(params: SimParams, members: dict | None = None):
@@ -22,6 +23,7 @@ def simulate(params: SimParams, members: dict | None = None):
             return True
         return random.random() < cont_rate
 
+    # メインループ
     for month in range(1, params.months + 1):
         active_map = {}
         for mid, meta in members.items():
@@ -71,7 +73,7 @@ def simulate(params: SimParams, members: dict | None = None):
         # 月毎の購入額を設定
         purchases = {"A": params.self_monthly_yen}
         totals.self_purchases += Decimal(params.self_monthly_yen)
-        totals.activity_cost += Decimal(params.activity_cost_monthly)
+        # totals.activity_cost += Decimal(params.activity_cost_monthly)
         for mid, meta in members.items():
             if not active_map[mid]:
                 continue
@@ -93,6 +95,9 @@ def simulate(params: SimParams, members: dict | None = None):
         bonus_info = calc_bonus(purchases, members, root_id="A")
         totals.bonus += Decimal(bonus_info["A"]["bonus"])
 
+        activity_cost_monthly = calc_monthly_activity_cost(params.area, params.invite_per_month)
+        totals.activity_cost += Decimal(activity_cost_monthly)
+
         rec = {
             "month": month,
             "count_child": count_child,
@@ -107,8 +112,8 @@ def simulate(params: SimParams, members: dict | None = None):
             "rate": bonus_info["A"]["rate"],
             "bonus": float(bonus_info["A"]["bonus"]),
             "self_purchase": params.self_monthly_yen,
-            "total_self_purchases": float(totals.self_purchases),
-            "activity_cost_monthly": params.activity_cost_monthly
+            # "total_self_purchases": float(totals.self_purchases),
+            "activity_cost_monthly": activity_cost_monthly
         }
         # レコード（辞書）を作成し、append
         records.append(rec)

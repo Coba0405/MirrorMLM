@@ -236,3 +236,21 @@ def test_is_active_user():
 
     assert records[0]["num_active_children"] == 1
     assert records[1]["num_active_children"] == 2
+
+# 11. エリア、勧誘人数毎の活動費の算出
+def test_activity_cost_by_area():
+    params = SimParams(
+        months=1,
+        self_monthly_yen=0,
+        invite_per_month=5,
+        child_monthly_yen=0,
+        grand_monthly_yen=0,
+        cont_rate=1,
+        grace_months=0,
+        child_activity_rate=0,
+        invite_success_rate=0,
+        activity_cost_monthly=0,
+        area="local_town"
+    )
+    records, _, totals = simulate(params)
+    assert totals.activity_cost == 4000 + (900 + 200) * 5

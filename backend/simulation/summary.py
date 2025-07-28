@@ -1,4 +1,3 @@
-from dataclasses import asdict, is_dataclass
 from decimal import Decimal
 from .month_loop import simulate
 from .params import SimParams, TotalCost
@@ -27,35 +26,22 @@ def calc_summary(
     summary = {
         # records とそろえたキー名
         "total_self_purchases": _dec2float(totals.self_purchases),
-        "activity_cost": _dec2float(totals.activity_cost),
-        "bonus": _dec2float(totals.bonus),
+        "total_activity_cost": int(totals.activity_cost),
         "invites": totals.invites,
+        "bonus": _dec2float(totals.bonus),
         "net_profit": _dec2float(totals.net_profit),
     }
+
+    last_12 = records[-12:]
+    bonus_12 = sum(Decimal(rec["bonus"]) for rec in last_12)
+    act_12 = sum(Decimal(rec["activity_cost_monthly"]) for rec in last_12)
+    self_12 = sum(Decimal(rec["self_purchase"]) for rec in last_12)
+    net_12 = bonus_12 - act_12 - self_12
+
+    summary["last_year_summary"] = {
+        "bonus": float(bonus_12),
+        "total_activity_cost": float(act_12),
+        "total_self_purchases": float(self_12),
+        "net_profit": float(net_12)
+    }
     return records, summary
-# def _dec2float(obj):
-#     if isinstance(obj, Decimal):
-#         return float(obj)
-#     if is_dataclass(obj):
-#         return {k: _dec2float(v) for k, v in asdict(obj).items()}
-#     if isinstance(obj, dict):
-#         return {k: _dec2float(v) for k, v in obj.items()}
-#     return obj
-
-# def calc_totals(months: int, self_yen: int, invite: int, activity_cost: int):
-#     params = SimParams(
-#         months=months,
-#         self_monthly_yen=self_yen,
-#         invite_per_month=invite,
-#         activity_cost_monthly=activity_cost
-#     )
-
-#     # シミュレーション実行
-#     records, _, totals = simulate(params)
-
-#     # データクラス → 辞書化 → Decimal→float 変換
-#     totals_dict = _dec2float(asdict(totals))
-
-#     one_year = self_yen * 12
-#     return totals_dict, one_year
-
