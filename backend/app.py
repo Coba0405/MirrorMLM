@@ -66,13 +66,7 @@ def distribute():
 @app.route("/api/simulate", methods=["POST"])
 def run_sim():
     data = request.json
-    records, summary = calc_summary(
-        months=data["months"],
-        self_yen=data["self_monthly_yen"],
-        invite=data["invite_per_month"],
-        activity_cost=data.get("activity_cost_monthly", 0),
-        child_activity_rate = data["child_activity_rate"],
-    )
+    records, summary = calc_summary(**data)
 
     return jsonify({
         "records": records,

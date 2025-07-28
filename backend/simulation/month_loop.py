@@ -23,6 +23,12 @@ def simulate(params: SimParams, members: dict | None = None):
         return random.random() < cont_rate
 
     for month in range(1, params.months + 1):
+        active_map = {}
+        for mid, meta in members.items():
+            if month - meta["join_month"] <= params.grace_months:
+                active_map[mid] = True
+            else:
+                active_map[mid] = random.random() < params.cont_rate
         # 勧誘プールへ追加
         invites_pool_child += params.invite_per_month
         # 新規加入数(new_child)と余り(invites_pool_child)を代入
@@ -33,19 +39,10 @@ def simulate(params: SimParams, members: dict | None = None):
             member_id = f"B{next_child_id}"
             # 加入した子にIDを付与してmembersの辞書に追加
             members[member_id] = {"parent": "A", "join_month": month}
+            active_map[member_id] = True
             next_child_id += 1
 
-        active_children = []
-        # membersの中からmember_idとmetaでそのidに紐づく情報を順繰りに取得
-        for mid, meta in members.items():
-            # IDが"B"で始まる人に絞る 且つ join_monthから継続率、猶予期間から現在も活動しているかを判定
-            if mid.startswith("B") and is_active(
-                meta["join_month"],
-                month,
-                params.cont_rate,
-                params.grace_months
-            ):
-                active_children.append(mid)
+        active_children = [mid for mid in members if mid.startswith("B") and active_map[mid]]
 
         # 実際のアクティブユーザーの活動人数を算出してnum_activate_childrenに代入
         num_active_children = int(len(active_children) * params.child_activity_rate)
@@ -61,54 +58,36 @@ def simulate(params: SimParams, members: dict | None = None):
             if not active_children:
                 break
             parent_id = random.choice(active_children)
-            members[f"C{next_grand_id}"] = {
-                "parent": parent_id,
-                "join_month": month
-            }
+            members[f"C{next_grand_id}"] = {"parent": parent_id, "join_month": month}
+            active_map[f"C{next_grand_id}"] = True
             next_grand_id += 1
 
         totals.invites += new_child + new_grand
 
         # 現在のアクティブな子、孫を数える（継続率）
-        count_child = 0
-        for mid, meta in members.items():
-            if mid.startswith("B") and is_active(
-                meta["join_month"],
-                month,
-                params.cont_rate,
-                params.grace_months
-            ):
-                count_child += 1
-
-        count_grand
-        for mid, meta in members.items():
-            if mid.startswith("C") and is_active(
-                meta["join_month"],
-                month,
-                params.cont_rate,
-                params.grace_months
-            ):
-                count_grand += 1
+        count_child = sum(1 for mid in members if mid.startswith("B") and active_map[mid])
+        count_grand = sum(1 for mid in members if mid.startswith("C") and active_map[mid])
 
         # 月毎の購入額を設定
         purchases = {"A": params.self_monthly_yen}
         totals.self_purchases += Decimal(params.self_monthly_yen)
         totals.activity_cost += Decimal(params.activity_cost_monthly)
         for mid, meta in members.items():
+            if not active_map[mid]:
+                continue
             join_month = meta["join_month"]
-            if is_active(join_month, month, params.cont_rate, params.grace_months):
-                if mid.startswith("B"):
-                    if month == join_month:
-                        # 加入した初月だけ360,000PVになるよう560,000円分購入
-                        purchases[mid] = 560000
-                    else:
-                        # 加入月以外はランダムに取得する金額
-                        purchases[mid] = params.child_monthly_yen
-                elif mid.startswith("C"):
-                    if month == join_month:
-                        purchases[mid] = 560000
-                    else:
-                        purchases[mid] = params.grand_monthly_yen
+            if mid.startswith("B"):
+                if month == join_month:
+                    # 加入した初月だけ360,000PVになるよう560,000円分購入
+                    purchases[mid] = 560000
+                else:
+                    # 加入月以外はランダムに取得する金額
+                    purchases[mid] = params.child_monthly_yen
+            elif mid.startswith("C"):
+                if month == join_month:
+                    purchases[mid] = 560000
+                else:
+                    purchases[mid] = params.grand_monthly_yen
 
         # ボーナス計算呼び出し 関数を直接呼び出す
         bonus_info = calc_bonus(purchases, members, root_id="A")
@@ -129,6 +108,7 @@ def simulate(params: SimParams, members: dict | None = None):
             "bonus": float(bonus_info["A"]["bonus"]),
             "self_purchase": params.self_monthly_yen,
             "total_self_purchases": float(totals.self_purchases),
+            "activity_cost_monthly": params.activity_cost_monthly
         }
         # レコード（辞書）を作成し、append
         records.append(rec)

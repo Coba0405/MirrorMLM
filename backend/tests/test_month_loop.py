@@ -20,7 +20,8 @@ def test_count_child_19_invites():
         cont_rate = 0.9439,
         grace_months = 2,
         child_activity_rate = 0.9,
-        invite_success_rate= 0.05
+        invite_success_rate= 0.05,
+        activity_cost_monthly = 10000
     )
     result, _, _ = simulate(params,initial_members())
     # print(result)
@@ -37,7 +38,8 @@ def test_count_child_20_invites():
         cont_rate = 1,
         grace_months = 2,
         child_activity_rate = 0.9,
-        invite_success_rate= 0.05
+        invite_success_rate= 0.05,
+        activity_cost_monthly = 10000
     )
     records, _, _ = simulate(params,initial_members())
     # print(results)
@@ -59,7 +61,8 @@ def test_cont_rate_decreases_children():
         cont_rate = 0.9439,
         grace_months = 0,
         child_activity_rate = 0.9,
-        invite_success_rate = 0.05
+        invite_success_rate = 0.05,
+        activity_cost_monthly = 10000
     )
     records, _, _ = simulate(params, initial_members())
 
@@ -81,14 +84,15 @@ def test_grace_months_not_cont_rate():
         cont_rate = 0,
         grace_months = 2,
         child_activity_rate = 1,
-        invite_success_rate = 0.05
+        invite_success_rate = 0.05,
+        activity_cost_monthly = 10000
     )
     records, _, _ = simulate(params, initial_members())
 
-    assert records[0]["count_child"] == 1
-    assert records[1]["count_child"] == 2
-    assert records[2]["count_child"] == 2
-    assert records[3]["count_child"] == 2
+    assert records[0]["count_child"] == 1 # B1加入
+    assert records[1]["count_child"] == 2 # B2加入 B1猶予期間1ヶ月目
+    assert records[2]["count_child"] == 3 # B3加入 B1猶予期間2ヶ月目、B2猶予期間1ヶ月目
+    assert records[3]["count_child"] == 3 # B4加入 B1脱落、B2猶予期間2ヶ月目
 
 # 5. count_childが0の場合、invites_pool_grandが増えないこと
 def test_no_grand_without_children():
@@ -101,7 +105,8 @@ def test_no_grand_without_children():
         cont_rate = 1,
         grace_months = 2,
         child_activity_rate = 1,
-        invite_success_rate = 0.05
+        invite_success_rate = 0.05,
+        activity_cost_monthly = 10000
     )
     records, _, _ = simulate(params, initial_members())
 
@@ -121,7 +126,8 @@ def test_grand_without_children():
         cont_rate = 1,
         grace_months = 0,
         child_activity_rate = 1,
-        invite_success_rate = 1
+        invite_success_rate = 1,
+        activity_cost_monthly = 10000
     )
     records, _, _ = simulate(params, initial_members())
 
@@ -145,7 +151,8 @@ def test_child_created_id():
         cont_rate = 1,
         grace_months = 0,
         child_activity_rate = 1,
-        invite_success_rate = 1
+        invite_success_rate = 1,
+        activity_cost_monthly = 10000
     )
 
     _, members, _ = simulate(params, initial_members())
@@ -171,7 +178,8 @@ def test_grand_creat_id():
         cont_rate = 1,
         grace_months = 0,
         child_activity_rate = 1,
-        invite_success_rate = 1
+        invite_success_rate = 1,
+        activity_cost_monthly = 10000
     )
 
     _, members, _ = simulate(params, initial_members())
@@ -200,7 +208,8 @@ def test_retention_parent_and_join_month():
         cont_rate = 1,
         grace_months = 0,
         child_activity_rate = 1,
-        invite_success_rate = 0
+        invite_success_rate = 0,
+        activity_cost_monthly = 10000
     )
     _, members, _ = simulate(params, initial_members())
 
@@ -220,7 +229,8 @@ def test_is_active_user():
         cont_rate = 1,
         grace_months = 0,
         child_activity_rate = 0.5,
-        invite_success_rate = 0.05
+        invite_success_rate = 0.05,
+        activity_cost_monthly = 10000
     )
     records, _ , _= simulate(params, initial_members())
 
