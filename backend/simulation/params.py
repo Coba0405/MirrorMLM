@@ -7,6 +7,7 @@ class SimParams:
     self_monthly_yen: int #自分の月間製品購入費
     invite_per_month: int #月間勧誘人数
     activity_cost_monthly: int #月間勧誘費
+    target_annual_income: int = 0
     child_monthly_yen: int = 17000 #子の月間製品購入費
     grand_monthly_yen: int = 17000
     cont_rate: float = 0.9439 #ダウン会員(子)継続率

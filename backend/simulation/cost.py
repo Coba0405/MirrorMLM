@@ -6,7 +6,7 @@ def calc_monthly_activity_cost(area: str, invite_per_month: int) -> int:
     activity_cost_monthly = 0
     # 辞書の作成
     AREA_COST = {
-        'city_center': {"event":6000, "sales_unit":1000, "move_unit":500},
+        'city_center': {"event":10000, "sales_unit":1200, "move_unit":500},
         'local_city': {"event":5000, "sales_unit":1000, "move_unit":300},
         'local_town': {"event":4000, "sales_unit":900, "move_unit":200}
     }

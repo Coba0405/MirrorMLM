@@ -22,14 +22,26 @@ def calc_summary(
     )
     records, _, totals = simulate(params)
 
+    # 年商（年収）目標の判定
+    annual_target = params.target_annual_income
+    reached_year = None #到達していなければNone
+    bonus_sum = 0
+    for i, rec in enumerate(records, start=1):
+        bonus_sum += Decimal(rec["bonus"])
+        if i % 12 == 0:
+            year_no = i // 12
+            if bonus_sum >= annual_target:
+                reached_year = year_no
+                break
+            bonus_sum = 0
 
     summary = {
         # records とそろえたキー名
-        "total_self_purchases": _dec2float(totals.self_purchases),
-        "total_activity_cost": int(totals.activity_cost),
-        "invites": totals.invites,
-        "bonus": _dec2float(totals.bonus),
-        "net_profit": _dec2float(totals.net_profit),
+        "total_self_purchases 全期間の自己購入費": _dec2float(totals.self_purchases),
+        "total_activity_cost 全期間の活動費": int(totals.activity_cost),
+        "invites 加入総数": totals.invites,
+        "bonus 全期間のbonus": _dec2float(totals.bonus),
+        "net_profit 全期間の純利益・純損失": _dec2float(totals.net_profit),
     }
 
     last_12 = records[-12:]
@@ -39,9 +51,11 @@ def calc_summary(
     net_12 = bonus_12 - act_12 - self_12
 
     summary["last_year_summary"] = {
-        "bonus": float(bonus_12),
-        "total_activity_cost": float(act_12),
-        "total_self_purchases": float(self_12),
-        "net_profit": float(net_12)
+        "annual_income 最後の1年のbonus総額": float(bonus_12),
+        "total_activity_cost 最後の1年の活動費": float(act_12),
+        "total_self_purchases 最後の1年の自己購入費": float(self_12),
+        "net_profit 最後の1年の純利益・純損失": float(net_12)
     }
+    summary["target_annual_income 目標年商"] = annual_target
+    summary["target_reached_year 目標年商に到達するまでに要した年数"] = reached_year
     return records, summary
