@@ -17,11 +17,11 @@ def simulate(params: SimParams, members: dict | None = None):
     invites_pool_child = 0 #親がこれまで勧誘した子の数
     invites_pool_grand = 0 #子がこれまで勧誘した孫の数
 
-    def is_active(join_month, current_month, cont_rate, grace_months):
-        # 現在月数から加入月数を差し引いた月数が、残留猶予期間より小さい時
-        if current_month - join_month < grace_months:
-            return True
-        return random.random() < cont_rate
+    # def is_active(join_month, current_month, cont_rate, grace_months):
+    #     # 現在月数から加入月数を差し引いた月数が、残留猶予期間より小さい時
+    #     if current_month - join_month < grace_months:
+    #         return True
+    #     return random.random() < cont_rate
 
     # メインループ
     for month in range(1, params.months + 1):
@@ -30,7 +30,10 @@ def simulate(params: SimParams, members: dict | None = None):
             if month - meta["join_month"] <= params.grace_months:
                 active_map[mid] = True
             else:
-                active_map[mid] = random.random() < params.cont_rate
+                # 累計生存率で指数関数的に継続率を減らす
+                months_since_grace = month - meta["join_month"] - params.grace_months
+                survival_prob = params.cont_rate ** months_since_grace
+                active_map[mid] = random.random() < survival_prob
         # 勧誘プールへ追加
         invites_pool_child += params.invite_per_month
         # 新規加入数(new_child)と余り(invites_pool_child)を代入
@@ -66,7 +69,7 @@ def simulate(params: SimParams, members: dict | None = None):
 
         totals.invites += new_child + new_grand
 
-        # 現在のアクティブな子、孫を数える（継続率）
+        # 現在のアクティブな子、孫を数える（退会せず勧誘を継続しているユーザー）
         count_child = sum(1 for mid in members if mid.startswith("B") and active_map[mid])
         count_grand = sum(1 for mid in members if mid.startswith("C") and active_map[mid])
 

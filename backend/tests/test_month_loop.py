@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, random
 sys.path.append(os.getcwd())
 from backend.simulation.month_loop import simulate
 from backend.config.members import initial_members
@@ -254,3 +254,26 @@ def test_activity_cost_by_area():
     )
     records, _, totals = simulate(params)
     assert totals.activity_cost == 4000 + (900 + 200) * 5
+
+# 12. 子の継続率が1年後に約50％に収束するかの検証
+def test_cumulative_survival_decay(monkeypatch):
+    monkeypatch.setattr(random, "random", lambda:0.7)
+    params = SimParams(
+        months=3,
+        self_monthly_yen=0,
+        invite_per_month=0,
+        activity_cost_monthly=0,
+        child_monthly_yen=0,
+        grand_monthly_yen=0,
+        cont_rate=0.8, # ← 生存率
+        grace_months=0,
+        child_activity_rate=0,
+        invite_success_rate=0,
+        area="local_city"
+    )
+    custom_members = {
+        "A": {"parent": None, "join_month": 0},
+        "B1": {"parent": "A",   "join_month": 1}
+    }
+    records, _, _ = simulate(params, custom_members)
+    assert [rec["count_child"] for rec in records] == [1, 1, 0]
