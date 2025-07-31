@@ -24,24 +24,24 @@ function onSubmit() {
 </script>
 
 <template>
-    <form @submit.prevent="onSubmit" class="w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto rounded-lg shadow-lg space-y-5 bg-gray-100 p-10">
+    <form @submit.prevent="onSubmit" class="w-full max-w-4xl mx-auto rounded-lg shadow-lg space-y-5 bg-gray-100 p-10">
         <div class="flex items-center gap-4">
-            <label for="months" class="w-40 text-gray-900 text-right">活動期間（月）:</label>
+            <label for="months" class="w-40 text-gray-900 text-right">活動期間（月）: </label>
             <input id="months" v-model="months" type="number" class="flex-1 text-gray-900 border bg-white px-2 py-1 rounded" required />
         </div>
 
         <div class="flex items-center gap-4">
-            <label for="selfMonthlyYen" class="w-40 text-gray-900 text-right">月額購入金額（円）:</label>
+            <label for="selfMonthlyYen" class="w-40 text-gray-900 text-right">月額購入金額（円）: </label>
             <input id="selfMonthlyYen" v-model="selfMonthlyYen" type="number" placeholder="15,000" class="flex-1 text-gray-900 border bg-white px-2 py-1 rounded" required />
         </div>
 
         <div class="flex items-center gap-4">
-            <label for="invitePerMonth" class="w-40 text-gray-900 text-right">勧誘人数（月）:</label>
+            <label for="invitePerMonth" class="w-40 text-gray-900 text-right">勧誘人数（月）: </label>
             <input id="invitePerMonth" v-model="invitePerMonth" type="number" placeholder="0" class="flex-1 text-gray-900 border bg-white px-2 py-1 rounded" required />
         </div>
 
         <div class="flex items-center gap-4">
-            <label for="area" class="w-40 text-gray-900 text-right">活動地域：</label>
+            <label for="area" class="w-40 text-gray-900 text-right">活動地域： </label>
             <select id="area" v-model="area" class="flex-1 text-gray-900 border bg-white px-2 py-1 rounded" required>
                 <option value="city_center">都心部</option>
                 <option value="local_city">地方都市</option>
@@ -50,7 +50,7 @@ function onSubmit() {
         </div>
 
         <div class="flex items-center gap-4">
-            <label for="targetAnnualIncome" class="w-40 text-gray-900 text-right">目標年商（円）:</label>
+            <label for="targetAnnualIncome" class="w-40 text-gray-900 text-right">目標年商（円）: </label>
             <input id="targetAnnualIncome" v-model.number="targetAnnualIncome" type="number" placeholder="0" class="flex-1 text-gray-900 border bg-white px-2 py-1 rounded" />
         </div>
 
