@@ -3,16 +3,17 @@ const props = defineProps(['rows']);
 
 const fmt = (n) => {
     if (n === undefined || n === null || isNaN(n)) return '0';
-    return new Intl.NumberFormat('ja-JP').format(n);
+    // 3桁区切りの日本語表記にして返す
+    return n.toLocaleString('ja-JP');
 };
 </script>
 
 <template>
-<table class="w-full text-sm border">
-<thead class="bg-gray-600">
+<table class="max-w-4xl w-full mx-auto text-sm border">
+<thead class="bg-green-500">
     <tr>
     <th class="p-2 border">月</th>
-    <th class="p-5  border">ボーナス</th>
+    <th class="p-5 border">ボーナス</th>
     <th class="p-5 border">純利益/<br>純損失</th>
     <th class="p-2 border">ダウン人数</th>
     <th class="p-5 border">自己購入費</th>
@@ -24,16 +25,24 @@ const fmt = (n) => {
     </tr>
 </thead>
 <tbody>
-    <tr v-for="row in props.rows" :key="row.month" class="odd:bg-gray :bg-slate-50">
-    <td class="p-3 border text-center">{{ row.month }}</td>
-    <td class="p-3 border text-center">{{ fmt(row.bonus) }} 円</td>
-    <td class="p-3 border text-center">{{ fmt(row.bonus - row.activity_cost_monthly - row.self_purchase) }} 円</td>
-    <td class="p-3 border text-center">{{ fmt(row.count_child + row.count_grand) }} 人</td>
-    <td class="p-3 border text-center">{{ fmt(row.self_purchase) }} 円</td>
-    <td class="p-3 border text-center">{{ fmt(row.activity_cost_monthly) }} 円</td>
-    <td class="p-3 border text-center">{{ fmt(row.rate * 100) }} %</td>
-    <td class="p-3 border text-center">{{ fmt(row.group_bv) }} BV</td>
-    <td class="p-3 border text-center">{{ fmt(row.group_pv) }} PV</td>
+    <tr
+        v-for="row in props.rows"
+        :key="row.month"
+        :class="[
+            'text-gray-900',
+            (row.bonus - row.activity_cost_monthly - row.self_purchase) > 0
+            ? 'bg-blue-300' : 'bg-slate-50', 'odd:bg0gray-100'
+        ]"
+    >
+        <td class="p-3 border text-center">{{ row.month }}</td>
+        <td class="p-3 border text-center">{{ fmt(row.bonus) }} 円</td>
+        <td class="p-3 border text-center">{{ fmt(row.bonus - row.activity_cost_monthly - row.self_purchase) }} 円</td>
+        <td class="p-3 border text-center">{{ fmt(row.count_child + row.count_grand) }} 人</td>
+        <td class="p-3 border text-center">{{ fmt(row.self_purchase) }} 円</td>
+        <td class="p-3 border text-center">{{ fmt(row.activity_cost_monthly) }} 円</td>
+        <td class="p-3 border text-center">{{ fmt(row.rate * 100) }} %</td>
+        <td class="p-3 border text-center">{{ fmt(row.group_bv) }} BV</td>
+        <td class="p-3 border text-center">{{ fmt(row.group_pv) }} PV</td>
     </tr>
 </tbody>
 </table>

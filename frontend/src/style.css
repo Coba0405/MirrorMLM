@@ -36,8 +36,27 @@ h1 {
 }
 
 #app {
-  max-width: auto;
-  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  max-width: w-full;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: #FFFFFF;
+}
+
+.header {
+  width: 100%;
+  max-width: w-full;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer {
+  width: 100%;
+  max-width: w-full;
+  margin: 0 auto;
   padding: 2rem;
   text-align: center;
 }
@@ -98,3 +117,4 @@ button:focus-visible {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
