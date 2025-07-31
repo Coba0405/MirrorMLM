@@ -9,13 +9,15 @@ const area = ref('city_center');
 const targetAnnualIncome = ref(null);
 
 function onSubmit() {
-    emit('submit', {
-        months: months.value,
-        self_monthly_yen: selfMonthlyYen.value,
-        invite_per_month: invitePerMonth.value,
+    const params = {
+        months: Number(months.value),
+        self_monthly_yen: Number(selfMonthlyYen.value),
+        invite_per_month: Number(invitePerMonth.value),
         area: area.value,
-        target_annual_income: targetAnnualIncome.value,
-    });
+        target_annual_income: Number(targetAnnualIncome.value),
+    };
+    // console.log('params:', params);
+    emit('submit', params);
 }
 </script>
 
@@ -47,9 +49,9 @@ function onSubmit() {
 
         <label class="block">
         目標年商（円）:
-        <input v-model="targetAnnualIncome" type="number" placeholder="0" class="border ml-2 px-2 py-1" />
+        <input v-model.number="targetAnnualIncome" type="number" placeholder="0" class="border ml-2 px-2 py-1" />
         </label>
-        <!-- 各入力フィールド（省略） -->
+
         <button class="bg-blue-600 text-white px-4 py-2 rounded">計算</button>
     </form>
 </template>

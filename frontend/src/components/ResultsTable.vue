@@ -1,7 +1,10 @@
 <script setup>
 const props = defineProps(['rows']);
 
-const fmt = (n) => new Intl.NumberFormat('ja-JP').format(n);
+const fmt = (n) => {
+    if (n === undefined || n === null || isNaN(n)) return '0';
+    return new Intl.NumberFormat('ja-JP').format(n);
+};
 </script>
 
 <template>
@@ -10,8 +13,9 @@ const fmt = (n) => new Intl.NumberFormat('ja-JP').format(n);
     <tr>
     <th class="p-2 border">月</th>
     <th class="p-5  border">ボーナス</th>
-    <th class="p-5 border">純利益</th>
+    <th class="p-5 border">純利益/<br>純損失</th>
     <th class="p-2 border">ダウン人数</th>
+    <th class="p-5 border">自己購入費</th>
     <th class="p-5 border">勧誘活動費</th>
     <th class="p-1 border">ボーナス利率</th>
     <th class="p-7 border">グループBV</th>
@@ -23,8 +27,9 @@ const fmt = (n) => new Intl.NumberFormat('ja-JP').format(n);
     <tr v-for="row in props.rows" :key="row.month" class="odd:bg-gray :bg-slate-50">
     <td class="p-3 border text-center">{{ row.month }}</td>
     <td class="p-3 border text-center">{{ fmt(row.bonus) }} 円</td>
-    <td class="p-3 border text-center">{{ fmt(row.net_profit) }} 円</td>
+    <td class="p-3 border text-center">{{ fmt(row.bonus - row.activity_cost_monthly - row.self_purchase) }} 円</td>
     <td class="p-3 border text-center">{{ fmt(row.count_child + row.count_grand) }} 人</td>
+    <td class="p-3 border text-center">{{ fmt(row.self_purchase) }} 円</td>
     <td class="p-3 border text-center">{{ fmt(row.activity_cost_monthly) }} 円</td>
     <td class="p-3 border text-center">{{ fmt(row.rate * 100) }} %</td>
     <td class="p-3 border text-center">{{ fmt(row.group_bv) }} BV</td>
