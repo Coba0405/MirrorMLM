@@ -1,6 +1,7 @@
 <script setup>
 import Header from './components/Header.vue';
 import SimulatorPage from './components/SimulatorPage.vue';
+import Footer from './components/Footer.vue';
 </script>
 
 <template>
@@ -11,6 +12,8 @@ import SimulatorPage from './components/SimulatorPage.vue';
         <main class="main">
             <SimulatorPage />
         </main>
-        <footer class="footer">footer</footer>
+        <footer class="footer">
+            <Footer />
+        </footer>
     </div>
 </template>

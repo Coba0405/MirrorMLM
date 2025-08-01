@@ -9,12 +9,12 @@
             MirrorMLM
             </h1>
             <p class="text-sm md:text-base text-gray-600 mt-1">
-            数字で見るMLMの現実 — マルチ商法の収支を冷静にシミュレーション
+            数字で見るMLMの現実 — マルチ商法の収支シミュレーション
             </p>
         </div>
 
         <div class="text-sm text-gray-500 mt-2 md:mt-0">
-            <span class="mr-3">Ver. 0.1</span>
+            <span class="mr-3">Ver. 0.1.0</span>
         </div>
         </div>
     </header>
