@@ -17,23 +17,25 @@ def simulate(params: SimParams, members: dict | None = None):
     invites_pool_child = 0 #親がこれまで勧誘した子の数
     invites_pool_grand = 0 #子がこれまで勧誘した孫の数
 
-    # def is_active(join_month, current_month, cont_rate, grace_months):
-    #     # 現在月数から加入月数を差し引いた月数が、残留猶予期間より小さい時
-    #     if current_month - join_month < grace_months:
-    #         return True
-    #     return random.random() < cont_rate
-
+    active_map = {mid: True for mid in members}
     # メインループ
     for month in range(1, params.months + 1):
-        active_map = {}
+        # 累計生存率で指数関数的に継続率を減らす
         for mid, meta in members.items():
-            if month - meta["join_month"] <= params.grace_months:
-                active_map[mid] = True
-            else:
-                # 累計生存率で指数関数的に継続率を減らす
-                months_since_grace = month - meta["join_month"] - params.grace_months
-                survival_prob = params.cont_rate ** months_since_grace
-                active_map[mid] = random.random() < survival_prob
+            if mid == "A":
+                active_map[mid] - True
+                continue
+
+            if not active_map.get(mid, True):
+                continue
+
+            age = month - meta["join_month"]
+            if age <= params.grace_months:
+                continue
+
+            if random.random() >= params.cont_rate:
+                active_map[mid] = False
+
         # 勧誘プールへ追加
         invites_pool_child += params.invite_per_month
         # 新規加入数(new_child)と余り(invites_pool_child)を代入
@@ -41,13 +43,12 @@ def simulate(params: SimParams, members: dict | None = None):
 
         # その子の新規加入時に動的にmembersに追加
         for _ in range(new_child):
-            member_id = f"B{next_child_id}"
+            mid = f"B{next_child_id}"; next_child_id += 1
             # 加入した子にIDを付与してmembersの辞書に追加
-            members[member_id] = {"parent": "A", "join_month": month}
-            active_map[member_id] = True
-            next_child_id += 1
+            members[mid] = {"parent": "A", "join_month": month}
+            active_map[mid] = True
 
-        active_children = [mid for mid in members if mid.startswith("B") and active_map[mid]]
+        active_children = [mid for mid, meta in members.items() if mid.startswith("B") and active_map.get(mid, False)]
 
         # 実際のアクティブユーザーの活動人数を算出してnum_activate_childrenに代入
         num_active_children = int(len(active_children) * params.child_activity_rate)
@@ -63,9 +64,9 @@ def simulate(params: SimParams, members: dict | None = None):
             if not active_children:
                 break
             parent_id = random.choice(active_children)
-            members[f"C{next_grand_id}"] = {"parent": parent_id, "join_month": month}
-            active_map[f"C{next_grand_id}"] = True
-            next_grand_id += 1
+            mid = f"C{next_grand_id}"; next_grand_id += 1
+            members[mid] = {"parent": parent_id, "join_month": month}
+            active_map[mid] = True
 
         totals.invites += new_child + new_grand
 

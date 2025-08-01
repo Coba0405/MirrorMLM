@@ -20,12 +20,8 @@ from backend.simulation.summary import calc_summary
 
 app = Flask(__name__)
 
-# Vite の dev サーバ (http://localhost:5173) だけ許可
-CORS(
-    app,
-    resources={r"/api/*": {"origins": "http://localhost:5173"}},
-    supports_credentials=True,
-)
+# Vite の dev サーバ (http://localhost:5174) だけ許可
+CORS(app)
 
 def dec2float(obj):
     if isinstance(obj, Decimal):

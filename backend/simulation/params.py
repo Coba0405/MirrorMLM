@@ -23,8 +23,7 @@ class TotalCost:
     bonus: Decimal = field(default_factory=lambda: Decimal(0)) #ボーナス総額
     invites: int = 0 #累計加入人数
 
-    # 純利益 or 純損失
+    # 全期間の純利益 or 純損失
     @property
     def net_profit(self) -> Decimal:
         return self.bonus - (self.self_purchases + self.activity_cost)
-
