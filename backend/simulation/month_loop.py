@@ -50,12 +50,12 @@ def simulate(params: SimParams, members: dict | None = None):
 
         active_children = [mid for mid, meta in members.items() if mid.startswith("B") and active_map.get(mid, False)]
 
-        # 実際のアクティブユーザーの活動人数を算出してnum_activate_childrenに代入
-        num_active_children = int(len(active_children) * params.child_activity_rate)
-        # 実際のアクティブユーザーが勧誘した人数をchild_invites_totalに代入
-        child_invites_total = num_active_children * params.invite_per_month
+        # 実際のアクティブユーザーの活動人数を算出してactive_inviterに代入
+        active_inviters = [mid for mid in active_children if random.random() < params.child_activity_rate]
+        # 実際のアクティブユーザーが勧誘した人数(0~3人)をchild_invites_totalに代入
+        child_invites_total = sum(random.randint(0,3) for _ in active_inviters)
         # 勧誘成功した人をinvites_pool_grandに代入
-        invites_pool_grand += int(child_invites_total * params.invite_success_rate)
+        invites_pool_grand += int(child_invites_total)
 
         # 孫の新規加入時に動的にmembersに追加
         new_grand, invites_pool_grand = calc_join_and_remainder(invites_pool_grand)
@@ -110,7 +110,7 @@ def simulate(params: SimParams, members: dict | None = None):
             "invites_pool_grand": invites_pool_grand,
             "child_monthly_yen": params.child_monthly_yen,
             "grand_monthly_yen": params.grand_monthly_yen,
-            "num_active_children": num_active_children, #ユニットテスト用
+            "active_inviters": active_inviters, #ユニットテスト用
             "group_pv": bonus_info["A"]["group_pv"],
             "group_bv": bonus_info["A"]["group_bv"],
             "rate": bonus_info["A"]["rate"],

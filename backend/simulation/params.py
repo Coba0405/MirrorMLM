@@ -8,12 +8,12 @@ class SimParams:
     invite_per_month: int #月間勧誘人数
     activity_cost_monthly: int #月間勧誘費
     target_annual_income: int = 0
-    child_monthly_yen: int = 17000 #子の月間製品購入費
-    grand_monthly_yen: int = 17000
+    child_monthly_yen: int = 15000 #子の月間製品購入費
+    grand_monthly_yen: int = 15000
     cont_rate: float = 0.975 #ダウン会員(子)継続率
     grace_months: int = 2 #初期会員残留猶予期間
-    child_activity_rate: float = 0.7 #勧誘した子のアクティブ率70%
-    invite_success_rate: float = 0.05 #勧誘成功率
+    child_activity_rate: float = 0.4 #現実的な勧誘した子のアクティブ率30~40%
+    # invite_success_rate: float = 0.5 #勧誘成功率
     area: str = "city_center"
 
 @dataclass
