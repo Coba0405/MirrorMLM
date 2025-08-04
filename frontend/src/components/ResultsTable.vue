@@ -9,18 +9,18 @@ const fmt = (n) => {
 </script>
 
 <template>
-<table class="max-w-4xl w-full mx-auto text-sm border">
+<table class="max-w-5xl w-full mx-auto text-sm border">
 <thead class="bg-green-500">
     <tr>
-    <th class="p-2 border">月</th>
-    <th class="p-5 border">ボーナス</th>
-    <th class="p-5 border">純利益/<br>純損失</th>
-    <th class="p-2 border">ダウン人数</th>
-    <th class="p-5 border">自己購入費</th>
-    <th class="p-5 border">勧誘活動費</th>
+    <th class="p-1 border">月</th>
+    <th class="p-1 border">ボーナス</th>
+    <th class="p-1 border">純利益/<br>純損失</th>
+    <th class="p-1 border">ダウン人数</th>
+    <th class="p-1 border">自己購入費</th>
+    <th class="p-1 border">勧誘活動費</th>
     <th class="p-1 border">ボーナス利率</th>
-    <th class="p-7 border">グループBV</th>
-    <th class="p-7 border">グループPV</th>
+    <th class="p-1 border">グループBV</th>
+    <th class="b-1 border">グループPV</th>
 
     </tr>
 </thead>

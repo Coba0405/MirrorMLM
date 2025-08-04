@@ -9,7 +9,7 @@
             MirrorMLM
             </h1>
             <p class="text-sm md:text-base text-gray-600 mt-1">
-            数字で見るMLMの現実 — マルチ商法の収支シミュレーション
+            数字と構造で判断するマルチ商法の収支シミュレーション
             </p>
         </div>
 
