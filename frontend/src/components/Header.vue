@@ -13,9 +13,6 @@
             </p>
         </div>
 
-        <div class="text-sm text-gray-500 mt-2 md:mt-0">
-            <span class="mr-3">Ver. 0.1.0</span>
-        </div>
         </div>
     </header>
 </template>
