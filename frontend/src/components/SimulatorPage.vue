@@ -16,12 +16,20 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 // InputFormから受け取ったparamsを引数にバックエンドへリクエスト
 const runSimulation = async (params) => {
-    // ここのparamsはFlaskがrequest.jsonとして受け取るもの
-    const res = await axios.post(`${API_URL}/api/simulate`, params);
-    // 返ってきたsummaryとrecordsを格納
-    summary.value = res.data.summary;
-    records.value = res.data.records;
-};
+    // console.log("API送信パラメータ:", params);
+    // console.log("送信先URL:", API_URL);
+
+    try {
+        // ここのparamsはFlaskがrequest.jsonとして受け取るもの
+        const res = await axios.post(`${API_URL}/api/simulate`, params);
+        // console.log("レスポンス:", res.data);
+        // 返ってきたsummaryとrecordsを格納
+        summary.value = res.data.summary;
+        records.value = res.data.records;
+    } catch (err) {
+        console.error("通信エラー:", err);
+    }
+    };
 </script>
 
 <template>
