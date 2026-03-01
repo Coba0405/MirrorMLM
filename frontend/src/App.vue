@@ -5,15 +5,11 @@ import Footer from './components/Footer.vue';
 </script>
 
 <template>
-    <div class="w-full min-h-screen text-white block flex-col items-center justify-start p-8">
-        <header class="header">
-            <Header />
-        </header>
-        <main class="main">
-            <SimulatorPage />
-        </main>
-        <footer class="footer">
-            <Footer />
-        </footer>
-    </div>
+  <div class="min-h-screen bg-slate-900">
+    <Header />
+    <main class="max-w-5xl mx-auto px-4 py-10">
+      <SimulatorPage />
+    </main>
+    <Footer />
+  </div>
 </template>

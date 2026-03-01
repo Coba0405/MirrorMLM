@@ -1,109 +1,110 @@
 <template>
-  <footer class=" text-gray-900 py-12 px-6">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 shadow-md">
+  <footer class="border-t border-slate-700/50 bg-slate-900/60 text-slate-400 py-12 px-6 mt-4">
+    <div class="max-w-5xl mx-auto space-y-8">
 
-      <!-- 左カラム：説明 -->
-      <div class="space-y-6 text-left">
-        <p class="text-sm leading-relaxed text-gray-800 border-l-4 border-blue-400 pl-4">
-          ボーナス金額は<br>「グループBV × ボーナス利率 − ダウン会員へのボーナス」で算出。
-        </p>
-        <p class="text-sm leading-relaxed text-gray-800 border-l-4 border-blue-400 pl-4">
-          ダウン人数の増加率は
-          <a
-            href="https://www.iieej.org/public/committees/ssc/confs/ssc3/ssc3-2.pdf"
-            target="_blank"
-            class="text-blue-400 hover:underline"
-          >
-            SSC研究報告書
-          </a>
-          に基づき、5%を前提とし算出。
-        </p>
-        <p class="text-sm leading-relaxed text-gray-800 border-l-4 border-blue-400 pl-4">
-          一人加入毎にグループPVに360,000PVが加算。
-        </p>
-        <p class="text-sm leading-relaxed text-gray-800 border-l-4 border-blue-400 pl-4">
-          加入後2ヶ月は継続率100%、以降は年間30%の退会を想定。
-        </p>
-      </div>
-
-      <!-- 右カラム：費用・注意 -->
-      <div class="space-y-6 text-left">
-        <div class="text-sm text-gray-800 space-y-2 border-l-4 border-blue-400 pl-4">
-          <span>活動費：地域ごとに設定</span>
-          <p>（一人当たりの勧誘費 + 一人当たりの交通費）× 勧誘人数月間のイベント費</p>
-          <ul class="list-disc list-inside">
-            <li>都心部：(¥1,200 + ¥500) × 勧誘人数 + ¥10,000</li>
-            <li>地方都市：(¥1,000 + ¥300) × 勧誘人数 + ¥5,000</li>
-            <li>地方：(¥900 + ¥200) × 勧誘人数 + ¥4,000</li>
+      <!-- 情報グリッド -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- 計算ロジック -->
+        <div class="space-y-3">
+          <h3 class="text-white font-semibold text-sm uppercase tracking-wider">計算ロジック</h3>
+          <ul class="space-y-2.5">
+            <li class="flex gap-2.5 text-sm">
+              <span class="text-indigo-400 mt-0.5 shrink-0">▸</span>
+              <span>ボーナス = グループBV × ボーナス利率 − ダウン会員へのボーナス</span>
+            </li>
+            <li class="flex gap-2.5 text-sm">
+              <span class="text-indigo-400 mt-0.5 shrink-0">▸</span>
+              <span>
+                ダウン人数の増加率は
+                <a href="https://www.iieej.org/public/committees/ssc/confs/ssc3/ssc3-2.pdf" target="_blank" class="text-indigo-400 hover:text-indigo-300 underline underline-offset-2">
+                  SSC研究報告書
+                </a>
+                に基づき5%を前提
+              </span>
+            </li>
+            <li class="flex gap-2.5 text-sm">
+              <span class="text-indigo-400 mt-0.5 shrink-0">▸</span>
+              <span>一人加入毎にグループPVに360,000PV加算</span>
+            </li>
+            <li class="flex gap-2.5 text-sm">
+              <span class="text-indigo-400 mt-0.5 shrink-0">▸</span>
+              <span>加入後2ヶ月は継続率100%、以降は年間30%の退会を想定</span>
+            </li>
           </ul>
         </div>
 
-        <div class="text-sm text-gray-800 border-l-4 border-blue-400 pl-4">
-          純利益 = ボーナス − 購入金額 − 活動費
-          <br /> ※ 青背景の行が「純利益あり」の月です。
+        <!-- 地域別活動費 -->
+        <div class="space-y-3">
+          <h3 class="text-white font-semibold text-sm uppercase tracking-wider">地域別活動費</h3>
+          <p class="text-xs text-slate-500">（勧誘費 + 交通費）× 勧誘人数 + 月間イベント費</p>
+          <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 space-y-2.5 text-sm">
+            <div class="flex justify-between gap-4">
+              <span>🏙️ 都心部</span>
+              <span class="text-slate-300 text-xs font-mono">(¥1,200 + ¥500) × n + ¥10,000</span>
+            </div>
+            <div class="flex justify-between gap-4">
+              <span>🏘️ 地方都市</span>
+              <span class="text-slate-300 text-xs font-mono">(¥1,000 + ¥300) × n + ¥5,000</span>
+            </div>
+            <div class="flex justify-between gap-4">
+              <span>🌾 地方</span>
+              <span class="text-slate-300 text-xs font-mono">(¥900 + ¥200) × n + ¥4,000</span>
+            </div>
+          </div>
+          <p class="text-xs text-slate-500">純利益 = ボーナス − 購入金額 − 活動費</p>
         </div>
       </div>
-    </div>
 
-    <div class="max-w-6xl mx-auto grid grid-cols-1 gap-1 mt-3 shadow-md">
-      <div>
-        <h2 class="text-lg font-semibold text-gray-900 mb-2">
-          本シミュレーションのランダム性について
-        </h2>
-        <p class="text-sm leading-relaxed text-gray-700">
+      <!-- ランダム性 -->
+      <div class="bg-slate-800/50 border border-slate-700 rounded-xl p-5 space-y-3">
+        <h3 class="text-white font-semibold">本シミュレーションのランダム性について</h3>
+        <p class="text-sm text-slate-400">
           MirrorMLMでは、現実のマルチ商法に近い
-          <span class="font-medium">“人間の心理状況”や“不確実性”</span>
-          を再現するために、一部の項目に乱数を使用しています。
-          <br />
-          そのため、同じ条件であってもシミュレーション結果が多少変動することがあります。
+          <span class="text-white font-medium">"人間の心理状況"や"不確実性"</span>
+          を再現するために乱数を使用しています。同じ条件でも結果が多少変動することがあります。
         </p>
-      </div>
-
-      <!-- ランダム性の詳細リスト -->
-      <div class="bg-white p-4 rounded-md border-gray-200">
-        <h3 class="text-sm font-semibold text-gray-800 mb-2">乱数が使われている箇所（出典元リンク）</h3>
-        <ul class="list-disc list-inside text-sm space-y-2 text-gray-700">
+        <ul class="space-y-2 text-sm">
           <li>
-            <a href="https://wayroo.com/the-high-cost-of-low-mlm-representative-retention/?utm_source=chatgpt.com"
+            <a
+              href="https://wayroo.com/the-high-cost-of-low-mlm-representative-retention/?utm_source=chatgpt.com"
               target="_blank"
-              class="hover:underline"
+              class="flex gap-2 text-slate-400 hover:text-indigo-400 transition-colors"
             >
-              加入後、ユーザーの継続率が段階的に減少し、
-              <span class="font-semibold">1年後に約70％</span>
-              に収束するように調整しています（例：100% → 97.5% → 95.0% → …）。
+              <span class="text-indigo-500 shrink-0">①</span>
+              継続率が段階的に減少し、<span class="text-white font-medium mx-1">1年後に約70%</span>に収束
             </a>
           </li>
           <li>
-            <a href="https://www.fundera.com/resources/mlm-statistics?utm_source=chatgpt.com"
+            <a
+              href="https://www.fundera.com/resources/mlm-statistics?utm_source=chatgpt.com"
               target="_blank"
-              class="hover:underline"
+              class="flex gap-2 text-slate-400 hover:text-indigo-400 transition-colors"
             >
-              継続しているユーザーのうち、
-              <span class="font-semibold">積極的に勧誘活動を行うのは約40％</span>
-              という想定でランダム化しています。
+              <span class="text-indigo-500 shrink-0">②</span>
+              継続ユーザーのうち<span class="text-white font-medium mx-1">積極的に勧誘するのは約40%</span>
             </a>
           </li>
           <li>
-            <a href="https://www.mlm.com/corporate-feature-busting-mlm-myths/?utm_source=chatgpt.com"
+            <a
+              href="https://www.mlm.com/corporate-feature-busting-mlm-myths/?utm_source=chatgpt.com"
               target="_blank"
-              class="hover:underline"
+              class="flex gap-2 text-slate-400 hover:text-indigo-400 transition-colors"
             >
-              積極勧誘ユーザーが1ヶ月間に勧誘する人数は、
-              <span class="font-semibold">0〜3人の範囲</span>
-              でランダムに決定されます。
+              <span class="text-indigo-500 shrink-0">③</span>
+              積極勧誘ユーザーの月間勧誘数は<span class="text-white font-medium mx-1">0〜3人</span>でランダム決定
             </a>
           </li>
         </ul>
       </div>
-    </div>
 
-    <!-- コピーライト -->
-    <div class="mt-12 text-center text-xs text-gray-500 border-t border-gray-700 pt-4">
-      <p class="text-xs text-gray-500 pt-4">
-        このシミュレーターは参考情報であり、実際の報酬・費用とは異なる場合があります。個別の投資判断は自己責任でお願いいたします。
-      </p>
-      <span>© 2025 MirrorMLM. All rights reserved.</span><br>
-      <span class="mr-3">Ver. 1.0.1</span>
+      <!-- コピーライト -->
+      <div class="border-t border-slate-700/50 pt-6 text-center space-y-1">
+        <p class="text-xs text-slate-500">
+          このシミュレーターは参考情報であり、実際の報酬・費用とは異なる場合があります。個別の投資判断は自己責任でお願いいたします。
+        </p>
+        <p class="text-xs text-slate-600">© 2025 MirrorMLM. All rights reserved. Ver. 1.0.1</p>
+      </div>
+
     </div>
   </footer>
 </template>
