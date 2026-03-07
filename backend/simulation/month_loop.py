@@ -1,10 +1,10 @@
 import random
 from decimal import Decimal
-from backend.domain.bonus import calc_bonus
-from backend.config.members import initial_members
+from domain.bonus import calc_bonus
+from config.members import initial_members
 from .population import calc_join_and_remainder
 from .cost import calc_monthly_activity_cost
-from backend.simulation.params import SimParams, TotalCost
+from .params import SimParams, TotalCost
 
 def simulate(params: SimParams, members: dict | None = None):
     members = initial_members() if members is None else members
@@ -50,7 +50,7 @@ def simulate(params: SimParams, members: dict | None = None):
 
         active_children = [mid for mid, meta in members.items() if mid.startswith("B") and active_map.get(mid, False)]
 
-        # 実際のアクティブユーザーの活動人数を算出してactive_inviterに代入
+        # 実際のアクティブユーザーの活動人数を算出してactive_invitersに代入
         active_inviters = [mid for mid in active_children if random.random() < params.child_activity_rate]
         # 実際のアクティブユーザーが勧誘した人数(0~3人)をchild_invites_totalに代入
         child_invites_total = sum(random.randint(0,3) for _ in active_inviters)

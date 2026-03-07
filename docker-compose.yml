@@ -1,0 +1,29 @@
+
+version: "3.9"
+
+services:
+  backend:
+    build: ./backend
+    container_name: mirrormlm_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - FLASK_ENV=development
+      - FRONT_ORIGINS=http://localhost:5173
+      - PORT=8000
+    volumes:
+      - ./backend:/app
+      - ./backend/db:/app/db
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=http://localhost:8000
+    container_name: mirrormlm_frontend
+    ports:
+      - "5173:80"
+    # volumes:
+    #   - ./frontend:/app
+    stdin_open: true
+    tty: true

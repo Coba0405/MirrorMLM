@@ -12,8 +12,7 @@ class SimParams:
     grand_monthly_yen: int = 15000
     cont_rate: float = 0.975 #ダウン会員(子)継続率
     grace_months: int = 2 #初期会員残留猶予期間
-    child_activity_rate: float = 0.4 #現実的な勧誘した子のアクティブ率30~40%
-    # invite_success_rate: float = 0.5 #勧誘成功率
+    child_activity_rate: float = 0.4  #現実的な勧誘した子のアクティブ率30~40%
     area: str = "city_center"
 
 @dataclass

@@ -1,5 +1,5 @@
 from decimal import Decimal, ROUND_HALF_UP
-from backend.domain.constants import PV_PER_YEN, BV_PER_PV, BONUS_TABLE
+from domain.constants import PV_PER_YEN, BV_PER_PV, BONUS_TABLE
 
 def rint(x: Decimal) -> int:
     # 四捨五入で整数化

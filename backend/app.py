@@ -10,18 +10,24 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from decimal import Decimal, ROUND_HALF_UP
 
-from backend.domain.constants import PV_PER_YEN, BV_PER_PV
-from backend.config.members import initial_members
-from backend.domain.distribution import distribute_pv
-from backend.domain.bonus import calc_bonus
-from backend.simulation.month_loop import simulate
-from backend.simulation.params import SimParams
-from backend.simulation.summary import calc_summary
+from domain.constants import PV_PER_YEN, BV_PER_PV
+from config.members import initial_members
+from domain.distribution import distribute_pv
+from domain.bonus import calc_bonus
+from simulation.month_loop import simulate
+from simulation.params import SimParams
+from simulation.summary import calc_summary
 
 app = Flask(__name__)
 
 # Vite の dev サーバ (http://localhost:5174) だけ許可
-CORS(app)
+# CORS(app)
+# 既存の CORS() 呼び出しの代わりに以下を使う（origins を環境変数で受け取る）
+CORS(
+    app,
+    resources={r"/api/*": {"origins": os.environ.get("FRONT_ORIGINS", "http://localhost:5173")}},
+    supports_credentials=True,
+)
 
 def dec2float(obj):
     if isinstance(obj, Decimal):
@@ -69,6 +75,11 @@ def run_sim():
         "summary": summary
     })
 
+# if __name__ == "__main__":
+#     port = int(os.environ.get("PORT", 8000))
+#     app.run(host="0.0.0.0", port=port)
+
+# 既存の if __name__ == "__main__": 部分を以下のように変更
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=(os.environ.get("FLASK_ENV") == "development"))
