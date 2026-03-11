@@ -1,22 +1,32 @@
 <template>
-  <header class="bg-slate-900 border-b border-slate-700/60 shadow-lg sticky top-0 z-10">
-    <div class="max-w-5xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 text-xl">
-          🔍
-        </div>
-        <div class="text-left">
-          <h1 class="text-2xl font-bold text-white tracking-tight leading-none">MirrorMLM</h1>
-          <p class="text-xs text-slate-400 mt-1">数字と構造で判断するマルチ商法の収支シミュレーション</p>
+  <header style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border);" class="sticky top-0 z-10">
+    <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div>
+          <h1
+            class="grade-text text-3xl leading-none tracking-widest"
+            style="color: var(--text-primary); letter-spacing: 0.1em;"
+          >
+            MIRROR<span style="color: var(--grade-f);">MLM</span>
+          </h1>
+          <p class="text-xs mt-1" style="color: var(--text-muted);">数字と構造で判断するマルチ商法の収支シミュレーション</p>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <span class="px-3 py-1 text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-full font-medium">
-          ⚠ 教育目的
+      <div class="flex items-center gap-3">
+        <span
+          class="grade-text text-sm px-3 py-1 tracking-widest"
+          style="
+            color: var(--grade-f);
+            border: 1px solid var(--grade-f);
+            background: var(--danger-bg);
+            transform: rotate(-2deg);
+            display: inline-block;
+            letter-spacing: 0.1em;
+          "
+        >
+          YOUR REPORT
         </span>
-        <span class="px-3 py-1 text-xs bg-slate-800 text-slate-400 border border-slate-700 rounded-full">
-          v1.0.1
-        </span>
+        <span class="text-xs" style="color: var(--text-muted);">教育目的</span>
       </div>
     </div>
   </header>

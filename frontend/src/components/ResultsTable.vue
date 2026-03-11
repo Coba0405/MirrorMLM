@@ -11,16 +11,23 @@ const netProfit = (row) => row.bonus - row.activity_cost_monthly - row.self_purc
 
 <template>
 <div class="w-full">
-  <div class="bg-slate-800 border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
-    <div class="px-6 py-4 border-b border-slate-700 flex flex-col sm:flex-row sm:items-center gap-2">
-      <h3 class="font-bold text-white">月別詳細</h3>
-      <div class="flex items-center gap-4 text-xs text-slate-400 sm:ml-auto">
+  <div
+    class="rounded-xl overflow-hidden"
+    style="background-color: var(--bg-card); border: 1px solid var(--border);"
+  >
+    <!-- テーブルヘッダー -->
+    <div
+      class="px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-2"
+      style="border-bottom: 1px solid var(--border);"
+    >
+      <h3 class="font-bold text-sm tracking-wider" style="color: var(--text-primary);">MONTHLY DETAIL</h3>
+      <div class="flex items-center gap-4 text-xs sm:ml-auto" style="color: var(--text-muted);">
         <span class="flex items-center gap-1.5">
-          <span class="inline-block w-3 h-3 rounded bg-emerald-500/40 border border-emerald-500/30"></span>
+          <span class="inline-block w-2 h-4 rounded-sm" style="background-color: var(--grade-a); opacity: 0.6;"></span>
           黒字月
         </span>
         <span class="flex items-center gap-1.5">
-          <span class="inline-block w-3 h-3 rounded bg-slate-700/80 border border-slate-600"></span>
+          <span class="inline-block w-2 h-4 rounded-sm" style="background-color: var(--grade-f); opacity: 0.3;"></span>
           赤字月
         </span>
       </div>
@@ -28,42 +35,51 @@ const netProfit = (row) => row.bonus - row.activity_cost_monthly - row.self_purc
 
     <div class="overflow-x-auto">
       <table class="w-full text-sm">
-        <thead class="bg-slate-900/80 border-b border-slate-700">
+        <thead style="background-color: var(--bg-surface); border-bottom: 1px solid var(--border);">
           <tr>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">月</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">ボーナス</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">純利益/損失</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">ダウン人数</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">自己購入費</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">活動費</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">利率</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">グループBV</th>
-            <th class="px-4 py-3 text-right text-xs font-semibold text-slate-400 uppercase tracking-wider whitespace-nowrap">グループPV</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">月</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">ボーナス</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">純損益</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">ダウン人数</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">自己購入費</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">活動費</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">利率</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">BV</th>
+            <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-widest whitespace-nowrap" style="color: var(--text-muted);">PV</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-700/40">
+        <tbody>
           <tr
             v-for="row in props.rows"
             :key="row.month"
             class="transition-colors"
-            :class="netProfit(row) > 0
-              ? 'bg-emerald-500/10 hover:bg-emerald-500/15'
-              : 'hover:bg-slate-700/30'"
+            :style="{
+              backgroundColor: netProfit(row) > 0 ? 'rgba(16,185,129,0.05)' : 'transparent',
+              borderBottom: '1px solid var(--border)',
+            }"
+            onmouseover="this.style.backgroundColor = 'rgba(242,242,248,0.03)'"
+            onmouseout="this.style.backgroundColor = this.dataset.bg"
           >
-            <td class="px-4 py-3 font-medium text-slate-300 whitespace-nowrap">{{ row.month }}</td>
-            <td class="px-4 py-3 text-right text-white whitespace-nowrap">{{ fmt(row.bonus) }}</td>
             <td
-              class="px-4 py-3 text-right font-semibold whitespace-nowrap"
-              :class="netProfit(row) > 0 ? 'text-emerald-400' : 'text-rose-400'"
+              class="px-4 py-3 mono text-sm whitespace-nowrap"
+              :style="{
+                color: 'var(--text-primary)',
+                borderLeft: `2px solid ${netProfit(row) > 0 ? 'var(--grade-a)' : 'var(--grade-f)'}`,
+              }"
+            >{{ row.month }}</td>
+            <td class="px-4 py-3 text-right mono text-sm whitespace-nowrap" style="color: var(--text-primary);">{{ fmt(row.bonus) }}</td>
+            <td
+              class="px-4 py-3 text-right mono font-semibold text-sm whitespace-nowrap"
+              :style="{ color: netProfit(row) > 0 ? 'var(--grade-a)' : 'var(--grade-f)' }"
             >
               {{ netProfit(row) > 0 ? '+' : '' }}{{ fmt(netProfit(row)) }}
             </td>
-            <td class="px-4 py-3 text-right text-slate-300 whitespace-nowrap">{{ fmt(row.count_child + row.count_grand) }} 人</td>
-            <td class="px-4 py-3 text-right text-slate-300 whitespace-nowrap">{{ fmt(row.self_purchase) }}</td>
-            <td class="px-4 py-3 text-right text-slate-300 whitespace-nowrap">{{ fmt(row.activity_cost_monthly) }}</td>
-            <td class="px-4 py-3 text-right text-slate-300 whitespace-nowrap">{{ fmt(row.rate * 100) }}%</td>
-            <td class="px-4 py-3 text-right text-slate-400 text-xs whitespace-nowrap">{{ fmt(row.group_bv) }}</td>
-            <td class="px-4 py-3 text-right text-slate-400 text-xs whitespace-nowrap">{{ fmt(row.group_pv) }}</td>
+            <td class="px-4 py-3 text-right mono text-sm whitespace-nowrap" style="color: var(--text-muted);">{{ fmt(row.count_child + row.count_grand) }} 人</td>
+            <td class="px-4 py-3 text-right mono text-sm whitespace-nowrap" style="color: var(--text-muted);">{{ fmt(row.self_purchase) }}</td>
+            <td class="px-4 py-3 text-right mono text-sm whitespace-nowrap" style="color: var(--text-muted);">{{ fmt(row.activity_cost_monthly) }}</td>
+            <td class="px-4 py-3 text-right mono text-sm whitespace-nowrap" style="color: var(--text-muted);">{{ fmt(row.rate * 100) }}%</td>
+            <td class="px-4 py-3 text-right mono text-xs whitespace-nowrap" style="color: var(--text-muted);">{{ fmt(row.group_bv) }}</td>
+            <td class="px-4 py-3 text-right mono text-xs whitespace-nowrap" style="color: var(--text-muted);">{{ fmt(row.group_pv) }}</td>
           </tr>
         </tbody>
       </table>
